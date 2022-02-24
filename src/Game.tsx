@@ -30,7 +30,7 @@ interface GameProps {
   keyboardLayout: string;
 }
 
-const targets = targetList.slice(0, targetList.indexOf("murky") + 1); // Words no rarer than this one
+const targets = targetList.slice(0, targetList.indexOf("zafar") + 1); // Words no rarer than this one
 const minLength = 4;
 const maxLength = 11;
 
@@ -173,13 +173,17 @@ function Game(props: GameProps) {
       setHint("");
     } else if (key === "Enter") {
       if (currentGuess.length !== wordLength) {
-        setHint("Too short");
+        setHint("Longitud isuficiente");
         return;
       }
       if (!dictionary.includes(currentGuess)) {
-        setHint("Not a valid word");
+        setHint("Esa palabra no existe");
         return;
       }
+      // XXX
+      console.log(currentGuess);
+      // console.log(target);
+      // XXX
       for (const g of guesses) {
         const c = clue(g, target);
         const feedback = violation(props.difficulty, c, currentGuess);
@@ -188,19 +192,22 @@ function Game(props: GameProps) {
           return;
         }
       }
+      // XXX
+      console.log(target);
+      // XXX
       setGuesses((guesses) => guesses.concat([currentGuess]));
       setCurrentGuess((guess) => "");
 
       const gameOver = (verbed: string) =>
-        `You ${verbed}! The answer was ${target.toUpperCase()}. (Enter to ${
-          challenge ? "play a random game" : "play again"
+        `¡${verbed}! La palabra era ${target.toUpperCase()}. (Enter para ${
+          challenge ? "jugar un juego aleatorio" : "jugar otra vez"
         })`;
 
       if (currentGuess === target) {
-        setHint(gameOver("won"));
+        setHint(gameOver("Ganaste"));
         setGameState(GameState.Won);
       } else if (guesses.length + 1 === props.maxGuesses) {
-        setHint(gameOver("lost"));
+        setHint(gameOver("Perdiste"));
         setGameState(GameState.Lost);
       } else {
         setHint("");
@@ -259,7 +266,7 @@ function Game(props: GameProps) {
   return (
     <div className="Game" style={{ display: props.hidden ? "none" : "block" }}>
       <div className="Game-options">
-        <label htmlFor="wordLength">Letters:</label>
+        <label htmlFor="wordLength">Letras:</label>
         <input
           type="range"
           min={minLength}
@@ -287,13 +294,13 @@ function Game(props: GameProps) {
           disabled={gameState !== GameState.Playing || guesses.length === 0}
           onClick={() => {
             setHint(
-              `The answer was ${target.toUpperCase()}. (Enter to play again)`
+              `La palabra era ${target.toUpperCase()}. (Enter para jugar otra vez)`
             );
             setGameState(GameState.Lost);
             (document.activeElement as HTMLElement)?.blur();
           }}
         >
-          Give up
+          Rendirse
         </button>
       </div>
       <table
@@ -320,18 +327,18 @@ function Game(props: GameProps) {
       />
       <div className="Game-seed-info">
         {challenge
-          ? "playing a challenge game"
+          ? "jugando modo desafío"
           : seed
           ? `${describeSeed(seed)} — length ${wordLength}, game ${gameNumber}`
-          : "playing a random game"}
+          : "jugando modo aleatorio"}
       </div>
       <p>
         <button
           onClick={() => {
-            share("Link copied to clipboard!");
+            share("Enlace copiado al portapapeles.");
           }}
         >
-          Share a link to this game
+          Compartir enlace al juego
         </button>{" "}
         {gameState !== GameState.Playing && (
           <button
@@ -340,7 +347,7 @@ function Game(props: GameProps) {
                 ? ["⬛", "🟦", "🟧"]
                 : ["⬛", "🟨", "🟩"];
               share(
-                "Result copied to clipboard!",
+                "Resultado copiado al portapapeles.",
                 guesses
                   .map((guess) =>
                     clue(guess, target)
@@ -351,7 +358,7 @@ function Game(props: GameProps) {
               );
             }}
           >
-            Share emoji results
+            Compartir resultado
           </button>
         )}
       </p>
