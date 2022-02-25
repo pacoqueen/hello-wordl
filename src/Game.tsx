@@ -96,8 +96,8 @@ function Game(props: GameProps) {
   });
   const [hint, setHint] = useState<string>(
     challengeError
-      ? `Invalid challenge string, playing random game.`
-      : `Make your first guess!`
+      ? `Cadena de reto inválida, jugando aleatorio.`
+      : `Escribe tu primer intento.`
   );
   const currentSeedParams = () =>
     `?seed=${seed}&length=${wordLength}&game=${gameNumber}`;
