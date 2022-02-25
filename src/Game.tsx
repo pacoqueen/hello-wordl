@@ -181,7 +181,7 @@ function Game(props: GameProps) {
         return;
       }
       // XXX
-      console.log(currentGuess);
+      // console.log(currentGuess);
       // console.log(target);
       // XXX
       for (const g of guesses) {
@@ -193,7 +193,7 @@ function Game(props: GameProps) {
         }
       }
       // XXX
-      console.log(target);
+      // console.log(target);
       // XXX
       setGuesses((guesses) => guesses.concat([currentGuess]));
       setCurrentGuess((guess) => "");
